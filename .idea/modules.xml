@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/user-microservice.iml" filepath="$PROJECT_DIR$/user-microservice.iml" />
+      <module fileurl="file://$PROJECT_DIR$/nme-user-service.iml" filepath="$PROJECT_DIR$/nme-user-service.iml" />
     </modules>
   </component>
 </project>
