@@ -16,7 +16,6 @@ public class NMENotificationService {
     @Autowired
     private JavaMailSender mailSender;
 
-
     public void sendNotification(User newUser) throws MailException {
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
