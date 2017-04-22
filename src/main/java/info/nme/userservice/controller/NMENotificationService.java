@@ -24,7 +24,7 @@ public class NMENotificationService {
         mailMessage.setFrom("usernme481@gmail.com");
         mailMessage.setSubject("Email Confirmation");
         mailMessage.setText("Please on the link below \n " +
-                " http://localhost:8090/registrations/confirm/"+newUser.getRegistrationConfirmationToken()+ "\n"
+                "https://nme-user-service.herokuapp.com/registrations/confirm/"+newUser.getRegistrationConfirmationToken()+ "\n"
         );
 
         mailSender.send(mailMessage);
