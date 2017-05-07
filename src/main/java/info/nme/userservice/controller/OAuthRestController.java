@@ -38,7 +38,7 @@ public class OAuthRestController {
                         +"&password="+clientDetails.getPassword()+"&grant_type="+clientDetails.getGrantType(),
                 HttpMethod.GET, null, JSONWrappedObject.class);
 
-        result.getBody();
+        System.out.println("body " + result.getBody());
 
         return "200";
     }
