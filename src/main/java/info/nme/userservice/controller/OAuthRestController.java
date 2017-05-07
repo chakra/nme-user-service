@@ -36,7 +36,7 @@ public class OAuthRestController {
         ResponseEntity<JSONWrappedObject> result = restTemplate.exchange(
                 "https://obscure-fjord-89635.herokuapp.com/api/oauth/token?username="+clientDetails.getUsername()
                         +"&password="+clientDetails.getPassword()+"&grant_type="+clientDetails.getGrantType(),
-                HttpMethod.GET, null, JSONWrappedObject.class);
+                HttpMethod.GET, entity, JSONWrappedObject.class);
 
         System.out.println("body " + result.getBody());
 
