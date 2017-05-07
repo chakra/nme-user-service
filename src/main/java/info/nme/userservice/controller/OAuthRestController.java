@@ -18,29 +18,34 @@ import java.util.Arrays;
 public class OAuthRestController {
 
     @RequestMapping("/api/bearer")
-    public String getBearerCode(@RequestBody ClientDetails clientDetails) {
+    public Token getBearerCode(@RequestBody ClientDetails clientDetails) {
 
         RestTemplate restTemplate = new RestTemplate();
+
+        String plainCreds = clientDetails.getClientId() + ":" + clientDetails.getSecret();
+        byte[] plainCredsBytes = plainCreds.getBytes();
+        byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
+        String base64Creds = new String(base64CredsBytes);
+
         HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Basic " + base64Creds);
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 
-        String str = clientDetails.getClientId() + ":" + clientDetails.getSecret();
+        String refreshUrl = "https://obscure-fjord-89635.herokuapp.com/api/oauth/token?username="+clientDetails.getUsername()
+                +"&password="+clientDetails.getPassword()+"&grant_type="+clientDetails.getGrantType();
 
-        byte[]   bytesEncoded = Base64.encodeBase64(str .getBytes());
-        System.out.println("ecncoded value is " + new String(bytesEncoded ));
+        HttpEntity<String> request = new HttpEntity<String>(headers);
+        ResponseEntity<Token> refreshResponse = restTemplate.exchange(refreshUrl, HttpMethod.GET, request, Token.class);
 
-        headers.set("Authorization", "Basic " + bytesEncoded);
+        Token refreshToken = refreshResponse.getBody();
 
-        HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
+        String bearerUrl = "https://obscure-fjord-89635.herokuapp.com/api/oauth/token?grant_type=refresh_token&refresh_token="+refreshToken.getRefresh_token();
 
-        ResponseEntity<JSONWrappedObject> result = restTemplate.exchange(
-                "https://obscure-fjord-89635.herokuapp.com/api/oauth/token?username="+clientDetails.getUsername()
-                        +"&password="+clientDetails.getPassword()+"&grant_type="+clientDetails.getGrantType(),
-                HttpMethod.GET, entity, JSONWrappedObject.class);
+        ResponseEntity<Token> bearerResponse = restTemplate.exchange(bearerUrl, HttpMethod.GET, request, Token.class);
 
-        System.out.println("body " + result.getBody());
+        Token bearerToken = bearerResponse.getBody();
 
-        return "200";
+        return bearerToken; // bearer
     }
 
 }
